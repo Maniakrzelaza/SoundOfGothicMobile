@@ -9,12 +9,13 @@
     </MasterDetailPage.Master>
 
     <MasterDetailPage.Detail>
-        <NavigationPage>
+        <NavigationPage Title="Sound Of Gothic">
             <NavigationPage.Icon>
                 <OnPlatform x:TypeArguments="FileImageSource">
                     <On Platform="iOS" Value="tab_feed.png"/>
                 </OnPlatform>
             </NavigationPage.Icon>
+            <NavigationPage.BarTextColor>White</NavigationPage.BarTextColor>
             <x:Arguments>
                 <views:ItemsPage />
             </x:Arguments>

@@ -13,13 +13,11 @@ namespace SoundOfGothicMobile
         {
             InitializeComponent();
 
-
             MainPage = new MainPage();
         }
 
         protected override void OnStart()
         {
-            // Handle when your app starts
         }
 
         protected override void OnSleep()
