@@ -25,4 +25,10 @@
       <IsWinMDFile>true</IsWinMDFile>
     </Reference>
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Assets\styles.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

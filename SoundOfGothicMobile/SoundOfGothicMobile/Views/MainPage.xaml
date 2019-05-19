@@ -3,7 +3,7 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             xmlns:views="clr-namespace:SoundOfGothicMobile.Views"
             x:Class="SoundOfGothicMobile.Views.MainPage">
-
+ 
     <MasterDetailPage.Master>
         <views:MenuPage />
     </MasterDetailPage.Master>
@@ -15,7 +15,6 @@
                     <On Platform="iOS" Value="tab_feed.png"/>
                 </OnPlatform>
             </NavigationPage.Icon>
-            <NavigationPage.BarTextColor>White</NavigationPage.BarTextColor>
             <x:Arguments>
                 <views:ItemsPage />
             </x:Arguments>

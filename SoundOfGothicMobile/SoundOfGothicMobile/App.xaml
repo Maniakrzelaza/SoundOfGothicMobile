@@ -3,16 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SoundOfGothicMobile.App">
     <Application.Resources>
+        <StyleSheet Source="/Assets/styles.css" />
         <ResourceDictionary>
             <!--Global Styles-->
             <Color x:Key="NavigationPrimary">#614a4e</Color>
+            <Color x:Key="NavigationSecondary">#f3f3f3</Color>
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
             </Style>
-
             <OnPlatform x:TypeArguments="x:String" x:Key="NormalFont">
                 <On Platform="Android" Value="font.ttf#Gothic II - Noc Kruka" />
+                <On Platform="UWP" Value="Assets/Fonts/font.ttf#Gothic II - Noc Kruka" />
             </OnPlatform>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

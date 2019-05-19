@@ -31,6 +31,7 @@ namespace SoundOfGothicMobile.Views
         public ItemsPage()
         {
             BindingContext = viewModel = new ApiRecordViewModel();
+
             InitializeComponent();
 
             SearchEntry.Unfocused += async (sender, args) =>
