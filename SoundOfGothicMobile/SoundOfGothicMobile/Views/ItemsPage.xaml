@@ -22,8 +22,12 @@
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     <StackLayout>
-        <Entry x:Name="SearchEntry"  Placeholder="What do you want to hear" FontFamily="{StaticResource NormalFont}"/>
-        <SearchBar Placeholder="" BackgroundColor="#888" CancelButtonColor="White" />
+        <SearchBar x:Name="SearchEntry" 
+                   Placeholder="" 
+                   BackgroundColor="#888" 
+                   CancelButtonColor="White" 
+                   FontFamily="{StaticResource NormalFont}"
+                   TextColor="White"/>
         <ListView x:Name="ApiRecordViewModel"
                 ItemsSource="{Binding ApiRecords}"
                 VerticalOptions="FillAndExpand"
@@ -43,12 +47,25 @@
                                     <ColumnDefinition Width="50*" />
                                     <ColumnDefinition Width="30*" />
                                 </Grid.ColumnDefinitions>
-                                <Image Source="play.png" Grid.Row="0" Grid.Column="0" Scale="0.5">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                            Tapped="OnPlayButtonClicked"/>
-                                    </Image.GestureRecognizers>
-                                </Image>
+                                
+                                <OnPlatform x:TypeArguments="Image">
+                                    <On Platform="UWP">
+                                        <Image Source="play.png" Grid.Row="0" Grid.Column="0" Scale="0.5">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                            Tapped="OnPlayButtonClickedUWP"/>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                    </On>
+                                    <On Platform="Android">
+                                        <Image Source="play.png" Grid.Row="0" Grid.Column="0" Scale="0.5">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                            Tapped="OnPlayButtonClickedAndroid"/>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                    </On>
+                                </OnPlatform>
                                 <Slider Minimum="0" Maximum="1" Grid.Row="0" Grid.Column="1" ValueChanged="OnProgressSliderChange" ThumbColor="WhiteSmoke"/>
                                 <Slider Value="1" Minimum="0" Maximum="1" Grid.Row="0" Grid.Column="2" ValueChanged="OnVolumeSliderChange" ThumbColor="WhiteSmoke"/>
                             </Grid>
@@ -61,15 +78,15 @@
                             <Label LineBreakMode="CharacterWrap" FontFamily="{StaticResource NormalFont}">
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span Text="Plik:" Style="{DynamicResource ListItemTextStyle}" FontSize="8" TextColor="Gold" FontFamily="{StaticResource NormalFont}" />
-                                        <Span Text="{Binding Source}" Style="{DynamicResource ListItemTextStyle}" FontSize="8" TextColor="Gold" FontFamily="{StaticResource NormalFont}" />
+                                        <Span Text="Plik:" FontSize="8" TextColor="Gold" FontFamily="{StaticResource NormalFont}" />
+                                        <Span Text="{Binding Source}"  FontSize="8" TextColor="Gold" FontFamily="{StaticResource NormalFont}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer
                                             Tapped="OnSourceScriptClicked"/>
                                 </Label.GestureRecognizers>
-                            </Label>
+                                </Label>
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

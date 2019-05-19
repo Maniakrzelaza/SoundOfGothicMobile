@@ -36,18 +36,8 @@ namespace SoundOfGothicMobile.Views
 
             SearchEntry.Unfocused += async (sender, args) =>
             {
-                
                 List<ApiRecord> records = await GetRecordsFromApi(AppUrl, SearchEntry.Text);
                 BindingContext = viewModel = new ApiRecordViewModel(records);
-                
-                if (Device.RuntimePlatform == Device.Android)
-                {
-               
-                }
-                else if (Device.RuntimePlatform == Device.UWP)
-                {
-                    await CrossMediaManager.Current.Play("https://sounds.soundofgothic.pl/assets/gsounds/INFO_GRD_13_DASLAGER_13_01.WAV");
-                }
             };
         }
 
@@ -60,7 +50,16 @@ namespace SoundOfGothicMobile.Views
             return records;
         }
 
-        void OnPlayButtonClicked(object sender, SelectedItemChangedEventArgs args)
+        async void OnPlayButtonClickedUWP(object sender, SelectedItemChangedEventArgs args)
+        {
+            Image senderButton = sender as Image;
+            if (senderButton == null)
+                return;
+            String fileName = ((ApiRecord)senderButton.BindingContext).Filename.ToString();
+            CrossMediaManager.Current.MediaFinished += (a, b) => { CrossMediaManager.Current.Stop(); };
+            await CrossMediaManager.Current.Play("https://sounds.soundofgothic.pl/assets/gsounds/" + fileName.ToUpper() + ".WAV");
+        }
+        void OnPlayButtonClickedAndroid(object sender, SelectedItemChangedEventArgs args)
         {
 
             Image senderButton = sender as Image;
@@ -71,6 +70,7 @@ namespace SoundOfGothicMobile.Views
             Media.SetDataSource("https://sounds.soundofgothic.pl/assets/gsounds/" + fileName.ToUpper() + ".WAV");
             Media.Prepared += (send, eventArgs) => { Media.Start(); };
             Media.PrepareAsync();
+
         }
         void OnVolumeSliderChange(object sender, SelectedItemChangedEventArgs args)
         {
