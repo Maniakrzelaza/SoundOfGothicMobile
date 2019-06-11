@@ -16,6 +16,7 @@ using Android.Media;
 using Plugin.MediaManager;
 using Windows.UI.Xaml.Controls;
 using Image = Xamarin.Forms.Image;
+using SoundOfGothicMobile.Services;
 
 namespace SoundOfGothicMobile.Views
 {
@@ -26,6 +27,7 @@ namespace SoundOfGothicMobile.Views
         ApiRecordViewModel viewModel;
         HttpClient HttpClient = new HttpClient();
         MediaPlayer Media;
+        Plugin.MediaManager.Abstractions.IMediaManager mediaManager;
         string AppUrl = "https://api.soundofgothic.pl/?pageSize=50&page=0&filter=";
         String ScriptUrl = "https://api.soundofgothic.pl/source?pageSize=50&page=0&filter=";
         public ItemsPage()
@@ -39,6 +41,15 @@ namespace SoundOfGothicMobile.Views
                 List<ApiRecord> records = await GetRecordsFromApi(AppUrl, SearchEntry.Text);
                 BindingContext = viewModel = new ApiRecordViewModel(records);
             };
+        }
+
+        void DownloadSound(object sender, SelectedItemChangedEventArgs args)
+        {
+            Image senderButton = sender as Image;
+            if (senderButton == null)
+                return;
+            String fileName = ((ApiRecord)senderButton.BindingContext).Filename.ToString();
+            DependencyService.Get<IFileSaver>().SaveFile("https://sounds.soundofgothic.pl/assets/gsounds/" + fileName.ToUpper() + ".WAV");
         }
 
         async Task<List<ApiRecord>> GetRecordsFromApi(String baseUrl, String name)
@@ -56,7 +67,8 @@ namespace SoundOfGothicMobile.Views
             if (senderButton == null)
                 return;
             String fileName = ((ApiRecord)senderButton.BindingContext).Filename.ToString();
-            CrossMediaManager.Current.MediaFinished += (a, b) => { CrossMediaManager.Current.Stop(); };
+            mediaManager = CrossMediaManager.Current;
+            mediaManager.MediaFinished += (a, b) => { CrossMediaManager.Current.Stop(); };
             await CrossMediaManager.Current.Play("https://sounds.soundofgothic.pl/assets/gsounds/" + fileName.ToUpper() + ".WAV");
         }
         void OnPlayButtonClickedAndroid(object sender, SelectedItemChangedEventArgs args)
@@ -81,13 +93,21 @@ namespace SoundOfGothicMobile.Views
             Media.SetVolume(volume, volume);
         }
 
-        void OnProgressSliderChange(object sender, SelectedItemChangedEventArgs args)
+        void OnProgressSliderChangeAndroid(object sender, SelectedItemChangedEventArgs args)
         {
             Xamarin.Forms.Slider senderSlider = sender as Xamarin.Forms.Slider;
             if (senderSlider == null || Media == null)
                 return;
             float progress = (float)senderSlider.Value;
             Media.SeekTo((int)(Media.Duration * progress));
+        }
+        void OnProgressSliderChangeUWP(object sender, SelectedItemChangedEventArgs args)
+        {
+            Xamarin.Forms.Slider senderSlider = sender as Xamarin.Forms.Slider;
+            if (senderSlider == null || mediaManager == null)
+                return;
+            float progress = (float)senderSlider.Value;
+            mediaManager.Seek(TimeSpan.FromMilliseconds((int)(mediaManager.Duration.TotalMilliseconds * progress)));
         }
 
         async void OnSourceScriptClicked(object sender, SelectedItemChangedEventArgs args)

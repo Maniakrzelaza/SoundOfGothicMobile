@@ -9,7 +9,7 @@
                FontFamily="{StaticResource NormalFont}" 
                TextColor="{StaticResource NavigationSecondary}"
                MaxLines="1"
-               HorizontalOptions="Fill"/>
+               HorizontalOptions="Center"/>
     </NavigationPage.TitleView>
     
     <ContentPage.ToolbarItems>
@@ -38,14 +38,14 @@
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Padding="10">
-                            <Grid BackgroundColor="#484848">
+                            <Grid BackgroundColor="#484848" >
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="20*" />
-                                    <ColumnDefinition Width="50*" />
-                                    <ColumnDefinition Width="30*" />
+                                    <ColumnDefinition Width="70*" />
+                                    <ColumnDefinition Width="20*" />
                                 </Grid.ColumnDefinitions>
                                 
                                 <OnPlatform x:TypeArguments="Image">
@@ -66,8 +66,21 @@
                                         </Image>
                                     </On>
                                 </OnPlatform>
-                                <Slider Minimum="0" Maximum="1" Grid.Row="0" Grid.Column="1" ValueChanged="OnProgressSliderChange" ThumbColor="WhiteSmoke"/>
-                                <Slider Value="1" Minimum="0" Maximum="1" Grid.Row="0" Grid.Column="2" ValueChanged="OnVolumeSliderChange" ThumbColor="WhiteSmoke"/>
+                                <OnPlatform x:TypeArguments="Slider">
+                                    <On Platform="UWP">
+                                        <Slider Minimum="0" Maximum="1" Grid.Row="0" Grid.Column="1" ValueChanged="OnProgressSliderChangeUWP" ThumbColor="WhiteSmoke"/>
+
+                                    </On>
+                                    <On Platform="Android">
+                                        <Slider Minimum="0" Maximum="1" Grid.Row="0" Grid.Column="1" ValueChanged="OnProgressSliderChangeAndroid" ThumbColor="WhiteSmoke"/>
+                                    </On>
+                                </OnPlatform>
+                                <Image Source="save.png" Grid.Row="0" Grid.Column="2" Scale="0.5">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                            Tapped="DownloadSound"/>
+                                            </Image.GestureRecognizers>
+                                </Image>
                             </Grid>
                             <Label Text="{Binding Text}" 
                                 LineBreakMode="CharacterWrap" 

@@ -14,7 +14,7 @@ using Plugin.MediaManager.Abstractions;
 namespace SoundOfGothicMobile.Droid
 {
     
-    [Activity(Label = "SoundOfGothicMobile", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "SoundOfGothicMobile", Icon = "@drawable/gothic_icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         public MediaPlayer MediaPlayer;
