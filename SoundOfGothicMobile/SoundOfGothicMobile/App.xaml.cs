@@ -2,6 +2,8 @@
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using SoundOfGothicMobile.Views;
+using Android.Media;
+using SoundOfGothicMobile.Services;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SoundOfGothicMobile
@@ -18,16 +20,19 @@ namespace SoundOfGothicMobile
 
         protected override void OnStart()
         {
+            DependencyService.Get<ISoundPlayer>().Play("https://sounds.soundofgothic.pl/assets/gsounds/INFO_SFB_5_EINERVONEUCHWERDEN_02_00.WAV");
         }
 
         protected override void OnSleep()
         {
-            // Handle when your app sleeps
+            DependencyService.Get<ISoundPlayer>().Play("https://sounds.soundofgothic.pl/assets/gsounds/DIA_ADDON_MORGAN_PERM_15_00.WAV");
+
         }
 
         protected override void OnResume()
         {
-            // Handle when your app resumes
+            DependencyService.Get<ISoundPlayer>().Play("https://sounds.soundofgothic.pl/assets/gsounds/DIA_LOTHAR_ADD_01_47.WAV");
+
         }
     }
 }

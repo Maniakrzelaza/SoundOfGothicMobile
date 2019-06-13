@@ -4,10 +4,7 @@
              x:Class="SoundOfGothicMobile.Views.AboutPage"
              xmlns:vm="clr-namespace:SoundOfGothicMobile.ViewModels"
              Title="{Binding Title}">
-    
-    <ContentPage.BindingContext>
-        <vm:AboutViewModel />
-    </ContentPage.BindingContext>
+
     
     <ContentPage.Resources>
         <ResourceDictionary>

@@ -22,7 +22,7 @@
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     <StackLayout>
-        <SearchBar x:Name="SearchEntry" 
+        <SearchBar x:Name="SearchBar" 
                    Placeholder="" 
                    BackgroundColor="#888" 
                    CancelButtonColor="White" 
@@ -47,39 +47,23 @@
                                     <ColumnDefinition Width="70*" />
                                     <ColumnDefinition Width="20*" />
                                 </Grid.ColumnDefinitions>
-                                
-                                <OnPlatform x:TypeArguments="Image">
-                                    <On Platform="UWP">
-                                        <Image Source="play.png" Grid.Row="0" Grid.Column="0" Scale="0.5">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer
-                                            Tapped="OnPlayButtonClickedUWP"/>
-                                            </Image.GestureRecognizers>
-                                        </Image>
-                                    </On>
-                                    <On Platform="Android">
-                                        <Image Source="play.png" Grid.Row="0" Grid.Column="0" Scale="0.5">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer
-                                            Tapped="OnPlayButtonClickedAndroid"/>
-                                            </Image.GestureRecognizers>
-                                        </Image>
-                                    </On>
-                                </OnPlatform>
-                                <OnPlatform x:TypeArguments="Slider">
-                                    <On Platform="UWP">
-                                        <Slider Minimum="0" Maximum="1" Grid.Row="0" Grid.Column="1" ValueChanged="OnProgressSliderChangeUWP" ThumbColor="WhiteSmoke"/>
 
-                                    </On>
-                                    <On Platform="Android">
-                                        <Slider Minimum="0" Maximum="1" Grid.Row="0" Grid.Column="1" ValueChanged="OnProgressSliderChangeAndroid" ThumbColor="WhiteSmoke"/>
-                                    </On>
-                                </OnPlatform>
+                                <Image Source="play.png" Grid.Row="0" Grid.Column="0" Scale="0.5" >
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Tapped="OnPlayButtonClicked" />
+                                    </Image.GestureRecognizers>
+                                </Image>
+                                <Slider Minimum="0" 
+                                        Maximum="1" 
+                                        Grid.Row="0" 
+                                        Grid.Column="1" 
+                                        ValueChanged="OnProgressSliderChange" 
+                                        ThumbColor="WhiteSmoke"/>
                                 <Image Source="save.png" Grid.Row="0" Grid.Column="2" Scale="0.5">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer
-                                            Tapped="DownloadSound"/>
-                                            </Image.GestureRecognizers>
+                                       <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="DownloadSound"/>
+                                       </Image.GestureRecognizers>
                                 </Image>
                             </Grid>
                             <Label Text="{Binding Text}" 

@@ -17,30 +17,34 @@ using Plugin.MediaManager;
 using Windows.UI.Xaml.Controls;
 using Image = Xamarin.Forms.Image;
 using SoundOfGothicMobile.Services;
+using Microsoft.Extensions.Caching.Memory;
+using System.Windows.Input;
 
 namespace SoundOfGothicMobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ItemsPage : ContentPage
     {
-        //ItemsViewModel viewModel;
-        ApiRecordViewModel viewModel;
-        HttpClient HttpClient = new HttpClient();
-        MediaPlayer Media;
-        Plugin.MediaManager.Abstractions.IMediaManager mediaManager;
-        string AppUrl = "https://api.soundofgothic.pl/?pageSize=50&page=0&filter=";
-        String ScriptUrl = "https://api.soundofgothic.pl/source?pageSize=50&page=0&filter=";
+        private ApiRecordViewModel viewModel;
+        private HttpClient HttpClient = new HttpClient();
+        private MediaPlayer Media;
+        private Plugin.MediaManager.Abstractions.IMediaManager mediaManager;
+        private readonly IMemoryCache _cache;
+        const string AppUrl = "https://api.soundofgothic.pl/?pageSize=50&page=0&filter=";
+        const string ScriptUrl = "https://api.soundofgothic.pl/source?pageSize=50&page=0&filter=";
+
         public ItemsPage()
         {
+            _cache = new MemoryCache(new MemoryCacheOptions() { });
             BindingContext = viewModel = new ApiRecordViewModel();
 
             InitializeComponent();
-
-            SearchEntry.Unfocused += async (sender, args) =>
+            SearchBar.SearchCommand = new Command(async () =>
             {
-                List<ApiRecord> records = await GetRecordsFromApi(AppUrl, SearchEntry.Text);
+                string text = SearchBar.Text;
+                List<ApiRecord> records = await GetRecordsFromApi(AppUrl, text);
                 BindingContext = viewModel = new ApiRecordViewModel(records);
-            };
+            });
         }
 
         void DownloadSound(object sender, SelectedItemChangedEventArgs args)
@@ -54,35 +58,25 @@ namespace SoundOfGothicMobile.Views
 
         async Task<List<ApiRecord>> GetRecordsFromApi(String baseUrl, String name)
         {
-            Task<string> downloadTask = HttpClient.GetStringAsync(baseUrl + name);
-            string content = await downloadTask;
+            string content = "";
+            if (!_cache.TryGetValue(name, out content))
+            {
+                Task<string> downloadTask = HttpClient.GetStringAsync(baseUrl + name);
+                content = await downloadTask;
+                _cache.Set(name, content);
+            }
             JObject jObject = JObject.Parse(content);
             List<ApiRecord> records = JsonConvert.DeserializeObject<List<ApiRecord>>(jObject["records"].ToString());
             return records;
         }
 
-        async void OnPlayButtonClickedUWP(object sender, SelectedItemChangedEventArgs args)
+        void OnPlayButtonClicked(object sender, SelectedItemChangedEventArgs args)
         {
             Image senderButton = sender as Image;
             if (senderButton == null)
                 return;
             String fileName = ((ApiRecord)senderButton.BindingContext).Filename.ToString();
-            mediaManager = CrossMediaManager.Current;
-            mediaManager.MediaFinished += (a, b) => { CrossMediaManager.Current.Stop(); };
-            await CrossMediaManager.Current.Play("https://sounds.soundofgothic.pl/assets/gsounds/" + fileName.ToUpper() + ".WAV");
-        }
-        void OnPlayButtonClickedAndroid(object sender, SelectedItemChangedEventArgs args)
-        {
-
-            Image senderButton = sender as Image;
-            if (senderButton == null)
-                return;
-            String fileName = ((ApiRecord)senderButton.BindingContext).Filename.ToString();
-            Media = new MediaPlayer();
-            Media.SetDataSource("https://sounds.soundofgothic.pl/assets/gsounds/" + fileName.ToUpper() + ".WAV");
-            Media.Prepared += (send, eventArgs) => { Media.Start(); };
-            Media.PrepareAsync();
-
+            DependencyService.Get<ISoundPlayer>().Play("https://sounds.soundofgothic.pl/assets/gsounds/" + fileName.ToUpper() + ".WAV");
         }
         void OnVolumeSliderChange(object sender, SelectedItemChangedEventArgs args)
         {
@@ -92,22 +86,15 @@ namespace SoundOfGothicMobile.Views
             float volume = (float)senderSlider.Value;
             Media.SetVolume(volume, volume);
         }
+        Command cc = new Command<float>((progress) => DependencyService.Get<ISoundPlayer>().Seek(progress));
 
-        void OnProgressSliderChangeAndroid(object sender, SelectedItemChangedEventArgs args)
+        void OnProgressSliderChange(object sender, SelectedItemChangedEventArgs args)
         {
             Xamarin.Forms.Slider senderSlider = sender as Xamarin.Forms.Slider;
-            if (senderSlider == null || Media == null)
+            if (senderSlider == null)
                 return;
             float progress = (float)senderSlider.Value;
-            Media.SeekTo((int)(Media.Duration * progress));
-        }
-        void OnProgressSliderChangeUWP(object sender, SelectedItemChangedEventArgs args)
-        {
-            Xamarin.Forms.Slider senderSlider = sender as Xamarin.Forms.Slider;
-            if (senderSlider == null || mediaManager == null)
-                return;
-            float progress = (float)senderSlider.Value;
-            mediaManager.Seek(TimeSpan.FromMilliseconds((int)(mediaManager.Duration.TotalMilliseconds * progress)));
+            DependencyService.Get<ISoundPlayer>().Seek(progress);
         }
 
         async void OnSourceScriptClicked(object sender, SelectedItemChangedEventArgs args)
@@ -119,7 +106,6 @@ namespace SoundOfGothicMobile.Views
             List<ApiRecord> records = await GetRecordsFromApi(ScriptUrl, scriptName);
             BindingContext = viewModel = new ApiRecordViewModel(records);
         }
-
         async void AddItem_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
@@ -130,8 +116,6 @@ namespace SoundOfGothicMobile.Views
             base.OnAppearing();
             List<ApiRecord> records = await GetRecordsFromApi(AppUrl, "");
             BindingContext = viewModel = new ApiRecordViewModel(records);
-            /*if (viewModel.ApiRecords.Count == 0)
-                viewModel.Refresh.Execute(null);*/
         }
     }
 }
