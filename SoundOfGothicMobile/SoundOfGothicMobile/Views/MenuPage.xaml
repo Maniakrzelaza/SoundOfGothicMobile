@@ -4,17 +4,44 @@
              x:Class="SoundOfGothicMobile.Views.MenuPage"
              Title="Menu">
     <StackLayout VerticalOptions="FillAndExpand">
-        <ListView x:Name="ListViewMenu"
+        <StackLayout>
+            <ListView x:Name="ListViewMenu"
+                       HeightRequest="200"
                     HasUnevenRows="True">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Grid Padding="10">
-                            <Label Text="{Binding Title}" FontSize="20"/>
-                        </Grid>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="10">
+                                <Label Text="{Binding Title}" FontSize="20"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+        </StackLayout>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70*"/>
+                <ColumnDefinition Width="30*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Text="Dźwięk przywitania" Grid.Row="0" Grid.Column="0" HorizontalOptions="StartAndExpand"  />
+            <Switch x:Name="ShouldSayHelloSwitch" Grid.Row="0" Grid.Column="1" Toggled="ChangeGreetingsOptions"/>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40*"/>
+                <ColumnDefinition Width="60*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label x:Name="PagingLabel" Text="Paging: " HorizontalOptions="StartAndExpand"/>
+            <Slider x:Name="PagingSlider" Value="20" Grid.Row="0" Grid.Column="1" Maximum="50" Minimum="5" ValueChanged="OnPagingSliderChanged"/>
+        </Grid>
+        
     </StackLayout>
 </ContentPage>

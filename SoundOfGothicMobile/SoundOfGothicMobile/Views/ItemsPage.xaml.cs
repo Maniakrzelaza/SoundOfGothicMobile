@@ -27,8 +27,6 @@ namespace SoundOfGothicMobile.Views
     {
         private ApiRecordViewModel viewModel;
         private HttpClient HttpClient = new HttpClient();
-        private MediaPlayer Media;
-        private Plugin.MediaManager.Abstractions.IMediaManager mediaManager;
         private readonly IMemoryCache _cache;
         const string AppUrl = "https://api.soundofgothic.pl/?pageSize=50&page=0&filter=";
         const string ScriptUrl = "https://api.soundofgothic.pl/source?pageSize=50&page=0&filter=";
@@ -84,7 +82,7 @@ namespace SoundOfGothicMobile.Views
             if (senderSlider == null)
                 return;
             float volume = (float)senderSlider.Value;
-            Media.SetVolume(volume, volume);
+            //Media.SetVolume(volume, volume);
         }
         Command cc = new Command<float>((progress) => DependencyService.Get<ISoundPlayer>().Seek(progress));
 
@@ -105,10 +103,6 @@ namespace SoundOfGothicMobile.Views
             String scriptName = senderLabel.FormattedText.ToString().Replace("Plik:", "");
             List<ApiRecord> records = await GetRecordsFromApi(ScriptUrl, scriptName);
             BindingContext = viewModel = new ApiRecordViewModel(records);
-        }
-        async void AddItem_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
         }
 
         async protected override void OnAppearing()

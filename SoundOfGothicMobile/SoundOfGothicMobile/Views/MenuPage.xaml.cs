@@ -16,6 +16,9 @@ namespace SoundOfGothicMobile.Views
         {
             InitializeComponent();
 
+            ShouldSayHelloSwitch.IsToggled = Options.Instance.ShoudlSayHello;
+            PagingSlider.Value = Options.Instance.Paging;
+            PagingLabel.Text = "Paging: " + Options.Instance.Paging;
             menuItems = new List<HomeMenuItem>
             {
                 new HomeMenuItem {Id = MenuItemType.Browse, Title="Browse" },
@@ -33,6 +36,24 @@ namespace SoundOfGothicMobile.Views
                 var id = (int)((HomeMenuItem)e.SelectedItem).Id;
                 await RootPage.NavigateFromMenu(id);
             };
+        }
+        public void ChangeGreetingsOptions(object sender, ToggledEventArgs args)
+        {
+            Xamarin.Forms.Switch greetingsSwitch = sender as Xamarin.Forms.Switch;
+            if (greetingsSwitch == null)
+                return;
+            Options.Instance.ShoudlSayHello = greetingsSwitch.IsToggled;
+            Options.Instance.Save();
+        }
+        public void OnPagingSliderChanged(object sender, SelectedItemChangedEventArgs args)
+        {
+            Xamarin.Forms.Slider senderSlider = sender as Xamarin.Forms.Slider;
+            if (senderSlider == null)
+                return;
+            int paging = (int)senderSlider.Value;
+            PagingLabel.Text = "Paging: " + paging;
+            Options.Instance.Paging = paging;
+            Options.Instance.Save();
         }
     }
 }
