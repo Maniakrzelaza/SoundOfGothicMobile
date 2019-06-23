@@ -11,7 +11,12 @@ namespace SoundOfGothicMobile.ViewModels
 	public class ApiRecordViewModel
     {
         public List<ApiRecord> ApiRecords { get; set; }
-        public List<ApiRecord> Data { get; set; }
+        public int RecordCoundTotal { get; set; }
+        public int PageNumber { get; set; }
+        public int RecordsOnPage { get; set; }
+        public int FirstRecordOnPageNumber { get; set; }
+        public int LastRecordOnPageNumber { get; set; } 
+        public int DefaultPageSize { get; set; }
         bool isBusy = false;
         public bool IsBusy
         {

@@ -16,10 +16,13 @@ namespace SoundOfGothicMobile.Views
         {
             InitializeComponent();
 
+            PagingPicker.Items.Add("10");
+            PagingPicker.Items.Add("20");
+            PagingPicker.Items.Add("30");
             ShouldSayHelloSwitch.IsToggled = Options.Instance.ShoudlSayHello;
-            PagingSlider.Value = Options.Instance.Paging;
-            PagingLabel.Text = "Paging: " + Options.Instance.Paging;
-            menuItems = new List<HomeMenuItem>
+            //PagingSlider.Value = Options.Instance.Paging;
+            PagingPicker.Title = Options.Instance.Paging.ToString();
+           /* menuItems = new List<HomeMenuItem>
             {
                 new HomeMenuItem {Id = MenuItemType.Browse, Title="Browse" },
                 new HomeMenuItem {Id = MenuItemType.About, Title="About" }
@@ -35,7 +38,7 @@ namespace SoundOfGothicMobile.Views
 
                 var id = (int)((HomeMenuItem)e.SelectedItem).Id;
                 await RootPage.NavigateFromMenu(id);
-            };
+            };*/
         }
         public void ChangeGreetingsOptions(object sender, ToggledEventArgs args)
         {
@@ -51,7 +54,6 @@ namespace SoundOfGothicMobile.Views
             if (senderSlider == null)
                 return;
             int paging = (int)senderSlider.Value;
-            PagingLabel.Text = "Paging: " + paging;
             Options.Instance.Paging = paging;
             Options.Instance.Save();
         }

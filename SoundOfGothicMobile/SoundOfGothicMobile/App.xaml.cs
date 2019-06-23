@@ -22,20 +22,14 @@ namespace SoundOfGothicMobile
         protected override void OnStart()
         {
             Options.Instance.Load();
-            if(Options.Instance.ShoudlSayHello)
-                DependencyService.Get<ISoundPlayer>().Play("https://sounds.soundofgothic.pl/assets/gsounds/INFO_SFB_5_EINERVONEUCHWERDEN_02_00.WAV");
         }
 
         protected override void OnSleep()
         {
-            if (Options.Instance.ShoudlSayHello)
-                DependencyService.Get<ISoundPlayer>().Play("https://sounds.soundofgothic.pl/assets/gsounds/DIA_ADDON_MORGAN_PERM_15_00.WAV");
         }
 
         protected override void OnResume()
         {
-            if (Options.Instance.ShoudlSayHello)
-                DependencyService.Get<ISoundPlayer>().Play("https://sounds.soundofgothic.pl/assets/gsounds/DIA_LOTHAR_ADD_01_47.WAV");
         }
     }
 }

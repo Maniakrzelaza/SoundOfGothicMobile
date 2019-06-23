@@ -21,31 +21,67 @@
             </ToolbarItem.Icon>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
-    <StackLayout>
+    <StackLayout BackgroundColor="{StaticResource NavigationPrimary}">
         <SearchBar x:Name="SearchBar" 
                    Placeholder="" 
                    BackgroundColor="#888" 
                    CancelButtonColor="White" 
                    FontFamily="{StaticResource NormalFont}"
                    TextColor="White"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10*" />
+                <ColumnDefinition Width="80*" />
+                <ColumnDefinition Width="10*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Image Source="left_arrow.png" Grid.Row="0" Grid.Column="0"  >
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="PrevPage" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Label LineBreakMode="CharacterWrap" FontFamily="{StaticResource NormalFont}" Grid.Row="0" Grid.Column="1" HorizontalTextAlignment="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding FirstRecordOnPageNumber}"  TextColor="White" FontFamily="{StaticResource NormalFont}" />
+                        <Span Text=" - " FontSize="8" TextColor="White" FontFamily="{StaticResource NormalFont}" />
+                        <Span Text="{Binding LastRecordOnPageNumber} "  TextColor="White" FontFamily="{StaticResource NormalFont}" />
+                        <Span Text=" / " FontSize="8" TextColor="White" FontFamily="{StaticResource NormalFont}" />
+                        <Span Text="{Binding RecordCoundTotal} "  TextColor="White" FontFamily="{StaticResource NormalFont}" />
+                    </FormattedString>
+                </Label.FormattedText>
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer
+                                            Tapped="OnSourceScriptClicked"/>
+                </Label.GestureRecognizers>
+            </Label>
+            <Image Source="right_arrow.png" Grid.Row="0" Grid.Column="2" >
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="NextPage" />
+                </Image.GestureRecognizers>
+            </Image>
+        </Grid>
         <ListView x:Name="ApiRecordViewModel"
                 ItemsSource="{Binding ApiRecords}"
                 VerticalOptions="FillAndExpand"
                 HasUnevenRows="true"
                 IsPullToRefreshEnabled="true"
+                BackgroundColor="White"
                 CachingStrategy="RecycleElement">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout Padding="10">
+                        <StackLayout>
                             <Grid BackgroundColor="#484848" >
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="20*" />
+                                    <ColumnDefinition Width="15*" />
                                     <ColumnDefinition Width="70*" />
-                                    <ColumnDefinition Width="20*" />
+                                    <ColumnDefinition Width="15*" />
                                 </Grid.ColumnDefinitions>
 
                                 <Image Source="play.png" Grid.Row="0" Grid.Column="0" Scale="0.5" >
