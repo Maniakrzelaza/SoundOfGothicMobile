@@ -40,8 +40,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Label x:Name="PagingLabel" Text="Paging: " Grid.Row="0" Grid.Column="0" HorizontalOptions="StartAndExpand" VerticalOptions="Center"  TextColor="White" FontFamily="{StaticResource NormalFont}"/>
-           <!-- <Slider x:Name="PagingSlider" Value="20" Grid.Row="0" Grid.Column="1" Maximum="50" Minimum="5" ValueChanged="OnPagingSliderChanged"/> -->
-            <Picker x:Name="PagingPicker"  Title="Paging" Grid.Row="0" Grid.Column="1"  TextColor="White" FontFamily="{StaticResource NormalFont}"/>
+            <Picker x:Name="PagingPicker" SelectedIndexChanged="OnPagingPickerChanged" Title="Paging" Grid.Row="0" Grid.Column="1"  TextColor="White" FontFamily="{StaticResource NormalFont}" TitleColor="White"/>
         </Grid>
         
     </StackLayout>

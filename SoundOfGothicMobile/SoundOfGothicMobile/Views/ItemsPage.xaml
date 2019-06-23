@@ -37,7 +37,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Image Source="left_arrow.png" Grid.Row="0" Grid.Column="0"  >
+            <Image x:Name="PrevButton" Source="left_arrow.png" Grid.Row="0" Grid.Column="0"  >
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer Tapped="PrevPage" />
                 </Image.GestureRecognizers>
@@ -57,7 +57,7 @@
                                             Tapped="OnSourceScriptClicked"/>
                 </Label.GestureRecognizers>
             </Label>
-            <Image Source="right_arrow.png" Grid.Row="0" Grid.Column="2" >
+            <Image x:Name="NextButton" Source="right_arrow.png" Grid.Row="0" Grid.Column="2" >
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer Tapped="NextPage" />
                 </Image.GestureRecognizers>

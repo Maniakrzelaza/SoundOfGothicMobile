@@ -28,31 +28,46 @@ namespace SoundOfGothicMobile.Views
         private ApiRecordViewModel viewModel;
         private HttpClient HttpClient = new HttpClient();
         private readonly IMemoryCache _cache;
-        private int CurrentPage = 0;
-        private int Paging = 30;
+        public int CurrentPage = 0;
         private string GetAppUrl()
         {
             const string Format = "https://api.soundofgothic.pl/?pageSize={0}&page={1}&filter=";
-            string result = string.Format(Format, this.Paging.ToString(), this.CurrentPage.ToString());
+            string result = string.Format(Format, Options.Instance.Paging.ToString(), this.CurrentPage.ToString());
             return result;
         }
         const string ScriptUrl = "https://api.soundofgothic.pl/source?pageSize=50&page=0&filter=";
-        public async void NextPage(object sender, SelectedItemChangedEventArgs args)
+        public async void NextPage(object sender, EventArgs args)
         {
             this.CurrentPage += 1;
+            if (this.CurrentPage > 0)
+            {
+                PrevButton.IsEnabled = true;
+                PrevButton.IsVisible = true;
+            }
             await this.Search();
         }
-        public async void PrevPage(object sender, SelectedItemChangedEventArgs args)
+        public async void PrevPage(object sender, EventArgs args)
         {
             this.CurrentPage -= 1;
+            if (this.CurrentPage <= 0)
+            {
+                PrevButton.IsEnabled = false;
+                PrevButton.IsVisible = false;
+            }
+                
             await this.Search();
         }
         public ItemsPage()
         {
             _cache = new MemoryCache(new MemoryCacheOptions() { });
             BindingContext = viewModel = new ApiRecordViewModel();
-            this.Paging = Options.Instance.Paging;
             InitializeComponent();
+            ViewsCominicator.Instance.Register("ItemsPage", this);
+            if (this.CurrentPage <= 0)
+            {
+                PrevButton.IsEnabled = false;
+                PrevButton.IsVisible = false;
+            }
             SearchBar.SearchCommand = new Command(async () =>
             {
                 this.CurrentPage = 0;
@@ -66,7 +81,7 @@ namespace SoundOfGothicMobile.Views
             BindingContext = viewModel;
         }
 
-        void DownloadSound(object sender, SelectedItemChangedEventArgs args)
+        void DownloadSound(object sender, EventArgs args)
         {
             Image senderButton = sender as Image;
             if (senderButton == null)
@@ -96,7 +111,7 @@ namespace SoundOfGothicMobile.Views
             resultView.LastRecordOnPageNumber = lastNumber;
             return resultView;
         }
-        void OnPlayButtonClicked(object sender, SelectedItemChangedEventArgs args)
+        void OnPlayButtonClicked(object sender, EventArgs args)
         {
             Image senderButton = sender as Image;
             if (senderButton == null)
@@ -122,7 +137,7 @@ namespace SoundOfGothicMobile.Views
             DependencyService.Get<ISoundPlayer>().Seek(progress);
         }
 
-        async void OnSourceScriptClicked(object sender, SelectedItemChangedEventArgs args)
+        async void OnSourceScriptClicked(object sender, EventArgs args)
         {
             Label senderLabel = sender as Label;
             if (senderLabel == null)

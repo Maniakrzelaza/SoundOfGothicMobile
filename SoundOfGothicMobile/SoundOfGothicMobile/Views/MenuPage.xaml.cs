@@ -1,4 +1,5 @@
 ﻿using SoundOfGothicMobile.Models;
+using SoundOfGothicMobile.Services;
 using System;
 using System.Collections.Generic;
 
@@ -15,7 +16,6 @@ namespace SoundOfGothicMobile.Views
         public MenuPage()
         {
             InitializeComponent();
-
             PagingPicker.Items.Add("10");
             PagingPicker.Items.Add("20");
             PagingPicker.Items.Add("30");
@@ -48,14 +48,17 @@ namespace SoundOfGothicMobile.Views
             Options.Instance.ShoudlSayHello = greetingsSwitch.IsToggled;
             Options.Instance.Save();
         }
-        public void OnPagingSliderChanged(object sender, SelectedItemChangedEventArgs args)
+        public async void OnPagingPickerChanged(object sender, EventArgs args)
         {
-            Xamarin.Forms.Slider senderSlider = sender as Xamarin.Forms.Slider;
-            if (senderSlider == null)
+            Xamarin.Forms.Picker senderPicker= sender as Xamarin.Forms.Picker;
+            if (senderPicker == null)
                 return;
-            int paging = (int)senderSlider.Value;
+            int paging = int.Parse(senderPicker.SelectedItem.ToString());
             Options.Instance.Paging = paging;
             Options.Instance.Save();
+            ItemsPage itemsPage = ((ItemsPage)ViewsCominicator.Instance.GetPage("ItemsPage"));
+            itemsPage.CurrentPage = 0;
+            await ((ItemsPage)ViewsCominicator.Instance.GetPage("ItemsPage")).Search();
         }
     }
 }
